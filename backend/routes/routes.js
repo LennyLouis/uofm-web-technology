@@ -9,8 +9,8 @@ router.post('/post', (req, res) => {
   res.send('Post API')
 })
 
+// Register a new user
 router.post('/register', (req, res) => {
-  res.send(req.body)
   const data = new User({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
