@@ -10,7 +10,7 @@ router.post('/post', (req, res) => {
 })
 
 router.post('/register', (req, res) => {
-  res.send('Register API')
+  res.send(req.body)
   const data = new User({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
@@ -18,6 +18,14 @@ router.post('/register', (req, res) => {
     email: req.body.email,
     password: req.body.password
   })
+
+  try {
+    const dataToSave = data.save();
+    res.status(200).json(dataToSave)
+  }
+  catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 })
 
 //Get all Method
