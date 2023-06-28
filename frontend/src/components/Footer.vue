@@ -1,26 +1,31 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 const links = ref([
-    'mdi-facebook',
-    'mdi-twitter',
-    'mdi-linkedin',
-    'mdi-instagram',
-])
+        'Home',
+        'Image gallery',
+        'My Images',
+        'Add Image'
+      ]);
+
 </script>
 
 <template>
-    <v-footer class="d-flex flex-column" :app="true">
-        <div class="bg-teal d-flex w-100 align-center px-4">
-            <strong>Get connected with us on social networks!</strong>
-
-            <v-spacer></v-spacer>
-
-            <v-btn v-for="icon in icons" :key="icon" class="mx-4" :icon="icon" variant="plain" size="small"></v-btn>
-        </div>
-
-        <div class="px-4 py-2 bg-black text-center w-100">
-            {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
-        </div>
+    <v-footer :app="true">
+      <v-row justify="center" no-gutters>
+        <v-btn
+          v-for="link in links"
+          :key="link"
+          variant="text"
+          class="mx-2"
+          rounded="xl"
+        >
+          {{ link }}
+        </v-btn>
+        <v-divider></v-divider>
+        <v-col class="text-center mt-4" cols="12">
+          {{ new Date().getFullYear() }} — <strong>Esiea</strong>
+        </v-col>
+      </v-row>
     </v-footer>
-</template>
+  </template>
