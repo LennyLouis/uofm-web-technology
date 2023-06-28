@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require('express')
 
 const router = express.Router()
 
-const Image = require('../models/Image');
+const Image = require('../models/Image')
 
 /**
  * @swagger
@@ -37,15 +37,15 @@ const Image = require('../models/Image');
 
 router.get('/', async (req, res) => {
   try {
-    const images = await Image.find();
+    const images = await Image.find()
 
-    if (!images) return res.status(404).json({ message: 'No images found' });
+    if (!images) return res.status(404).json({ message: 'No images found' })
 
-    return res.status(200).json(images);
+    return res.status(200).json(images)
   } catch (error) {
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' })
   }
-});
+})
 
 /**
  * @swagger
@@ -85,18 +85,17 @@ router.get('/', async (req, res) => {
  *                   type: string
  */
 
-
 router.get('/:id', async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params
 
   try {
     // Check if a image with the same id already exists
-    const existingImage = await Image.findById(id);
-    if (!existingImage) return res.status(404).json({ message: 'This image does not exist' });
+    const existingImage = await Image.findById(id)
+    if (!existingImage) return res.status(404).json({ message: 'This image does not exist' })
 
-    return res.status(200).json(existingImage);
+    return res.status(200).json(existingImage)
   } catch (error) {
-    return res.status(400).json({ message: 'An error occurred while getting the course', error: error });
+    return res.status(400).json({ message: 'An error occurred while getting the course', error: error })
   }
 })
 
@@ -132,14 +131,13 @@ router.get('/:id', async (req, res) => {
  *                   type: object
  */
 
-
 router.post('/', async (req, res) => {
-  const { name, description, url } = req.body;
+  const { name, description, url } = req.body
 
   try {
     // Check if a image with the same name already exists
-    const existingImage = await Image.findOne({ name });
-    if (existingImage) return res.status(409).json({ message: 'Image already exists' });
+    const existingImage = await Image.findOne({ name })
+    if (existingImage) return res.status(409).json({ message: 'Image already exists' })
 
     // Create a image
     const newImage = new Image({
@@ -149,11 +147,11 @@ router.post('/', async (req, res) => {
     })
 
     // Save the image to the database
-    await newImage.save();
+    await newImage.save()
 
-    return res.status(200).json({ message: 'Image successfully created' });
+    return res.status(200).json({ message: 'Image successfully created' })
   } catch (error) {
-    return res.status(400).json({ message: 'An error occurred while saving the image', error: error });
+    return res.status(400).json({ message: 'An error occurred while saving the image', error: error })
   }
 })
 
@@ -196,30 +194,29 @@ router.post('/', async (req, res) => {
  *                   type: object
  */
 
-
 router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const { name, description, url } = req.body;
+  const { id } = req.params
+  const { name, description, url } = req.body
 
   try {
     // Check if any of the image properties were sent
-    if (!name && !description && !url) return res.status(400).json({ message: 'No image properties were provided' });
+    if (!name && !description && !url) return res.status(400).json({ message: 'No image properties were provided' })
 
     // Find the existing image by ID
-    const existingImage = await Image.findById(id);
-    if (!existingImage) return res.status(404).json({ message: 'Image not found' });
+    const existingImage = await Image.findById(id)
+    if (!existingImage) return res.status(404).json({ message: 'Image not found' })
 
     // Update the image properties if any of them was sent
-    if (name) existingImage.name = name;
-    if (description) existingImage.description = description;
-    if (url) existingImage.url = url;
+    if (name) existingImage.name = name
+    if (description) existingImage.description = description
+    if (url) existingImage.url = url
 
     // Save the updated image to the database
-    await existingImage.save();
+    await existingImage.save()
 
-    return res.status(200).json({ message: 'Image successfully updated' });
+    return res.status(200).json({ message: 'Image successfully updated' })
   } catch (error) {
-    return res.status(400).json({ message: 'An error occurred while updating the image', error: error });
+    return res.status(400).json({ message: 'An error occurred while updating the image', error: error })
   }
 })
 
@@ -256,22 +253,21 @@ router.put('/:id', async (req, res) => {
  *                   type: object
  */
 
-
 router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params
 
   try {
     // Find the existing image by ID
-    const existingImage = await Image.findById(id);
-    if (!existingImage) return res.status(404).json({ message: 'Image not found' });
+    const existingImage = await Image.findById(id)
+    if (!existingImage) return res.status(404).json({ message: 'Image not found' })
 
     // Delete the image from the database
-    await existingImage.deleteOne();
+    await existingImage.deleteOne()
 
-    return res.status(200).json({ message: 'Image successfully deleted' });
+    return res.status(200).json({ message: 'Image successfully deleted' })
   } catch (error) {
-    return res.status(400).json({ message: 'An error occurred while deleting the image', error: error });
+    return res.status(400).json({ message: 'An error occurred while deleting the image', error: error })
   }
 })
 
-module.exports = router;
+module.exports = router

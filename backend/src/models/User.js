@@ -21,7 +21,7 @@
  *           type: string
  *           description: The password of the user.
  */
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
   firstname: {

@@ -15,7 +15,7 @@
  *           type: string
  *           description: The URL of the image.
  */
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const imageSchema = new mongoose.Schema({
   name: {
