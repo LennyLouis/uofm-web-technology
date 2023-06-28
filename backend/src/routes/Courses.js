@@ -266,7 +266,7 @@ router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Check if a course with the same id already exists
+    // Find the existing course by ID
     const existingCourse = await Course.findById(id);
     if (!existingCourse) return res.status(404).json({ message: 'This course does not exist' });
 
