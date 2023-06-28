@@ -1,13 +1,12 @@
 <script setup>
-import { RouterView } from 'vue-router';
+import {  RouterView } from 'vue-router'
 import SideBar from './SideBar.vue';
-
-
 
 </script>
 
 <template>
+  <main>
     <SideBar />
-    <!-- <h1>Home</h1> -->
     <RouterView />
+  </main>
 </template>
