@@ -56,10 +56,11 @@ const options = {
       {
         url: "http://localhost:3000/api",
       },
-    ],
-    schemas: ["./src/schemas/*.js"]
+    ]
   },
-  apis: ["./src/routes/*.js"]
+  apis: [
+    "./src/routes/*.js",
+    "./src/models/*.js"]
 };
 
 const specs = swaggerJsdoc(options);

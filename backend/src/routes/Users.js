@@ -2,78 +2,15 @@ const express = require('express');
 
 const router = express.Router()
 
-const User = require('../schemas/User');
-
-/**
- * @swagger
- * /users/register:
- *   post:
- *     summary: Register a new user
- *     description: Create a new user account with the provided information.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       200:
- *         description: Successfully registered the user.
- *       400:
- *         description: Bad request. An error occurred while registering the user.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- */
-
-router.post('/register', async (req, res) => {
-  const { firstname, lastname, username, email, password } = req.body;
-
-  try {
-    // Check if a user with the same username or email already exists
-    const existingUserUsername = await User.findOne({ username });
-    const existingUserMail = await User.findOne({ email });
-
-    if (existingUserUsername) {
-      // User with the same username already exists
-      return res.status(409).json({ message: 'Username already exists' });
-    }
-
-    if (existingUserMail) {
-      // User with the same email already exists
-      return res.status(409).json({ message: 'Email already exists' });
-    }
-
-    // Create a new user
-    const newUser = new User({
-      firstname,
-      lastname,
-      username,
-      email,
-      password,
-      role: 'user',
-      status: 'active'
-    });
-
-    // Save the new user
-    const savedUser = await newUser.save();
-
-    res.status(200).json({ message: 'User successfully registered' });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
+const User = require('../models/User');
 
 /**
  * @swagger
  * /users/login:
  *   get:
  *     summary: Find a user by username or email and password
+ *     tags:
+ *       - users
  *     description: Retrieve a user from the database based on the provided username or email and password.
  *     parameters:
  *       - in: query
@@ -152,6 +89,64 @@ router.get('/login', async (req, res) => {
   } catch (error) {
     // Error occurred while querying the database
     return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+/**
+ * @swagger
+ * /users/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags:
+ *       - users
+ *     description: Create a new user account with the provided information.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: Successfully registered the user.
+ *       400:
+ *         description: Bad request. An error occurred while registering the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+
+router.post('/register', async (req, res) => {
+  const { firstname, lastname, username, email, password } = req.body;
+
+  try {
+    // Check if a user with the same username or email already exists
+    const existingUserUsername = await User.findOne({ username });
+    if (existingUserUsername) return res.status(409).json({ message: 'Username already exists' });
+    const existingUserMail = await User.findOne({ email });
+    if (existingUserMail) return res.status(409).json({ message: 'Email already exists' });
+
+    // Create a new user
+    const newUser = new User({
+      firstname,
+      lastname,
+      username,
+      email,
+      password,
+      role: 'user',
+      status: 'active'
+    });
+
+    // Save the new user to the database
+    await newUser.save();
+
+    res.status(200).json({ message: 'User successfully registered' });
+  } catch (error) {
+    res.status(400).json({ message: 'An error occurred while creating the user', error: error });
   }
 });
 

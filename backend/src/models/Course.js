@@ -17,7 +17,9 @@
  *             type: string
  *           description: The content of the course.
  *         tools:
- *           type: string
+ *           type: array
+ *           items:
+ *             type: string
  *           description: The tools used in the course (optional).
  */
 
@@ -38,7 +40,7 @@ const courseSchema = new mongoose.Schema({
   },
   tools: {
     required: false,
-    type: String
+    type: [String]
   }
 })
 
