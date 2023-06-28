@@ -2,72 +2,15 @@ const express = require('express');
 
 const router = express.Router()
 
-const User = require('../schemas/User');
-
-/**
- * @swagger
- * /users/register:
- *   post:
- *     summary: Register a new user
- *     description: Create a new user account with the provided information.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       200:
- *         description: Successfully registered the user.
- *       400:
- *         description: Bad request. An error occurred while registering the user.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- */
-
-router.post('/users/register', async (req, res) => {
-  const { firstname, lastname, username, email, password } = req.body;
-
-  try {
-    // Check if a user with the same username or email already exists
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-
-    if (existingUser) {
-      // User with the same username or email already exists
-      return res.status(409).json({ message: 'Username or email already exists' });
-    }
-
-    // Create a new user
-    const newUser = new User({
-      firstname,
-      lastname,
-      username,
-      email,
-      password,
-      role: 'user',
-      status: 'active'
-    });
-
-    // Save the new user
-    const savedUser = await newUser.save();
-
-    res.status(200).json({ message: 'User successfully registered' });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
+const User = require('../models/User');
 
 /**
  * @swagger
  * /users/login:
  *   get:
  *     summary: Find a user by username or email and password
+ *     tags:
+ *       - users
  *     description: Retrieve a user from the database based on the provided username or email and password.
  *     parameters:
  *       - in: query
@@ -120,7 +63,7 @@ router.post('/users/register', async (req, res) => {
  *                 message:
  *                   type: string
  */
-router.get('/users/login', async (req, res) => {
+router.get('/login', async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
@@ -149,31 +92,62 @@ router.get('/users/login', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /users/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags:
+ *       - users
+ *     description: Create a new user account with the provided information.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: Successfully registered the user.
+ *       400:
+ *         description: Bad request. An error occurred while registering the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 
+router.post('/register', async (req, res) => {
+  const { firstname, lastname, username, email, password } = req.body;
 
-//Post Method
-router.post('/post', (req, res) => {
-  res.send('Post API')
-})
+  try {
+    // Check if a user with the same username or email already exists
+    const existingUserUsername = await User.findOne({ username });
+    if (existingUserUsername) return res.status(409).json({ message: 'Username already exists' });
+    const existingUserMail = await User.findOne({ email });
+    if (existingUserMail) return res.status(409).json({ message: 'Email already exists' });
 
-//Get all Method
-router.get('/getAll', (req, res) => {
-  res.send('Get All API')
-})
+    // Create a new user
+    const newUser = new User({
+      firstname,
+      lastname,
+      username,
+      email,
+      password,
+      role: 'user',
+      status: 'active'
+    });
 
-//Get by ID Method
-router.get('/getOne/:id', (req, res) => {
-  res.send('Get by ID API')
-})
+    // Save the new user to the database
+    await newUser.save();
 
-//Update by ID Method
-router.patch('/update/:id', (req, res) => {
-  res.send('Update by ID API')
-})
-
-//Delete by ID Method
-router.delete('/delete/:id', (req, res) => {
-  res.send('Delete by ID API')
-})
+    res.status(200).json({ message: 'User successfully registered' });
+  } catch (error) {
+    res.status(400).json({ message: 'An error occurred while creating the user', error: error });
+  }
+});
 
 module.exports = router;
