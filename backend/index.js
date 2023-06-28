@@ -1,4 +1,6 @@
 const express = require('express')
+const cors = require('cors')
+const dotenv = require('dotenv')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const fs = require('fs')
@@ -8,9 +10,9 @@ const swaggerUi = require('swagger-ui-express')
 /**
  * Express App
  */
-
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 
 // For each file of the routes folder, we will add a new route to our Express app.
