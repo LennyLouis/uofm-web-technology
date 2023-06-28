@@ -1,22 +1,24 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const fs = require('fs')
 const swaggerJsdoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
-const courses = require('./src/routes/Courses')
-const images = require('./src/routes/Images')
-const users = require('./src/routes/Users')
 
 /**
  * Express App
  */
+
 const app = express()
 
 app.use(express.json())
 
-app.use('/api/courses', courses)
-app.use('/api/images', images)
-app.use('/api/users', users)
+// For each file of the routes folder, we will add a new route to our Express app.
+// This will allow us to separate our routes into different files without having to
+// manually add each route to our Express app.
+for (file of fs.readdirSync('./src/routes'))
+  app.use(`/api/${file.split('.')[0].toLowerCase()}`, require(`./src/routes/${file}`))
+
 /**
  * End Express App Declaration
  */
@@ -75,5 +77,5 @@ app.use(
  */
 
 app.listen(3000, () => {
-  console.log(`Server Started at ${3000}`)
+  console.log(`Server Started at ${3000} `)
 })
