@@ -1,17 +1,24 @@
 <script setup>
-import Header from './components/Header.vue'
-import Footer from './components/Footer.vue'
-import SideBar from './components/SideBar.vue';
+import Footer from './components/Footer.vue';
+import Header from './components/Header.vue';
+import Home from './components/Home.vue';
 
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView} from 'vue-router';
+
 
 </script>
 
 <template>
   <v-app>
-    <Header />
-    <SideBar  />
-    <RouterView/>
-    <Footer />
-</v-app>
+    <v-main>
+      <Header />
+
+      <RouterView />
+      <Footer />
+
+      
+    </v-main>
+  </v-app>
 </template>
+
+<style scoped></style>
