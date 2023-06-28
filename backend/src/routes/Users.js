@@ -30,16 +30,22 @@ const User = require('../schemas/User');
  *                   type: string
  */
 
-router.post('/users/register', async (req, res) => {
+router.post('/register', async (req, res) => {
   const { firstname, lastname, username, email, password } = req.body;
 
   try {
     // Check if a user with the same username or email already exists
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    const existingUserUsername = await User.findOne({ username });
+    const existingUserMail = await User.findOne({ email });
 
-    if (existingUser) {
-      // User with the same username or email already exists
-      return res.status(409).json({ message: 'Username or email already exists' });
+    if (existingUserUsername) {
+      // User with the same username already exists
+      return res.status(409).json({ message: 'Username already exists' });
+    }
+
+    if (existingUserMail) {
+      // User with the same email already exists
+      return res.status(409).json({ message: 'Email already exists' });
     }
 
     // Create a new user
@@ -120,7 +126,7 @@ router.post('/users/register', async (req, res) => {
  *                 message:
  *                   type: string
  */
-router.get('/users/login', async (req, res) => {
+router.get('/login', async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
@@ -148,32 +154,5 @@ router.get('/users/login', async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
-
-//Post Method
-router.post('/post', (req, res) => {
-  res.send('Post API')
-})
-
-//Get all Method
-router.get('/getAll', (req, res) => {
-  res.send('Get All API')
-})
-
-//Get by ID Method
-router.get('/getOne/:id', (req, res) => {
-  res.send('Get by ID API')
-})
-
-//Update by ID Method
-router.patch('/update/:id', (req, res) => {
-  res.send('Update by ID API')
-})
-
-//Delete by ID Method
-router.delete('/delete/:id', (req, res) => {
-  res.send('Delete by ID API')
-})
 
 module.exports = router;

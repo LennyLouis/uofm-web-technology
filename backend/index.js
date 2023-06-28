@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-const routes = require('./src/routes/routes');
+const courses = require('./src/routes/Courses');
+const images = require('./src/routes/Images');
+const users = require('./src/routes/Users');
 
 
 /**
@@ -13,7 +15,9 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/api', routes);
+app.use('/api/courses', courses);
+app.use('/api/images', images);
+app.use('/api/users', users);
 /**
  * End Express App Declaration
  */
