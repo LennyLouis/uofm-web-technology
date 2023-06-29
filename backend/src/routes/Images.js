@@ -108,7 +108,7 @@ router.post('/', imageController.createImage)
 
 /**
  * @swagger
- * /images:
+ * /images/{id}:
  *   put:
  *     summary: Update an image by ID
  *     tags:
@@ -145,7 +145,7 @@ router.post('/', imageController.createImage)
  *                   type: object
  */
 
-router.put('/', imageController.updateImage)
+router.put('/:id', imageController.updateImage)
 
 /**
  * @swagger

@@ -71,19 +71,18 @@ const register = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-  const userId = req.body.id
-  const newInfo = req.body.newInfo
+  const id = req.params
   const { user } = req
 
   try {
     // Check if user is authorized to update the user
-    if (user._id == userId || user.role == 'admin') {
+    if (user._id == id || user.role == 'admin') {
       // Check if a user with the same user id already exists
-      const existingUser = await User.findOne({ _id: userId })
+      const existingUser = await User.findOne({ _id: id })
       if (!existingUser) return res.status(409).json({ message: 'User does not exist' })
 
       // Update the user
-      Object.keys(newInfo).forEach(el => existingUser[el] = newInfo[el])
+      Object.keys(req.body).forEach(el => existingUser[el] = req.body[el])
 
       // Save the updated user to the database
       await existingUser.save()
