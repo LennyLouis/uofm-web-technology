@@ -35,5 +35,8 @@ onMounted(() => {
       color="white"
       off-icon="mdi-theme-light-dark"
       on-icon="mdi-theme-light-dark"></v-switch>
+    <!-- place the switch to the right  -->
+    <v-spacer></v-spacer>
+    <v-btn variant="text" color="white" @click="navigate('account')"> My Account </v-btn>
   </v-app-bar>
 </template>
