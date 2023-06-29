@@ -21,7 +21,7 @@ const logout = () => {
 
 <template>
   <v-navigation-drawer rail location="left">
-    
+
     <v-tooltip text="Tooltip">
       <template v-slot:activator="{ props }">
         <!-- DIV IN SIDE BAR -->
