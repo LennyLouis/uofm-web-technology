@@ -41,10 +41,10 @@ export default {
                     this.showAlert = true;
 
                     setTimeout(() => {
-                        this.showAlert = false; 
+                        this.showAlert = false;
                     }, 2000);
 
-                    // this.$router.push(`/`)
+                    window.location.reload();
                 }
             }
         }
@@ -69,13 +69,8 @@ export default {
                     <v-btn color="indigo" :loading="loading" type="submit" block class="mt-2" text="Confirm update"></v-btn>
                 </v-form>
 
-                <v-alert
-                    v-model="showAlert"
-                    type="success"
-                    dismissible
-                    transition="scale-transition"
-                    :timeout="2000">
-                        Form submitted successfully!
+                <v-alert v-model="showAlert" type="success" dismissible transition="scale-transition" :timeout="2000">
+                    Form submitted successfully!
                 </v-alert>
             </v-card-text>
         </v-card>
