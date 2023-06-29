@@ -1,24 +1,21 @@
 <script setup>
-import Footer from './components/Footer.vue';
+import { RouterLink, RouterView } from 'vue-router'
+import SideBar from './components/SideBar.vue';
 import Header from './components/Header.vue';
-import Home from './components/Home.vue';
-
-import { RouterView} from 'vue-router';
-
-
+import Footer from './components/Footer.vue';
 </script>
 
 <template>
-  <v-app>
-    <v-main>
-      <Header />
 
-      <RouterView />
-      <Footer />
-
-      
-    </v-main>
+<v-app>
+  <v-main>
+    <Header />
+    <!-- <SideBar /> -->
+    <RouterView />
+    <Footer />
+  </v-main>
   </v-app>
+
 </template>
 
 <style scoped>
