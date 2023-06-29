@@ -19,7 +19,7 @@ const logout = () => {
 </script>
 
 <template>
-  <v-navigation-drawer expand-on-hover rail location="left">
+  <v-navigation-drawer rail location="left">
     <v-list>
       <v-list-item :title="user.firstname" :subtitle="user.email"> </v-list-item>
     </v-list>
@@ -29,10 +29,10 @@ const logout = () => {
     <v-list density="compact" nav>
       <v-list-item
         prepend-icon="mdi-home"
-        title="Home"
         @click="navigate('')"
-        value="home"
-      ></v-list-item>
+        value="home">
+        <v-tooltip activator="parent" location="right">Home</v-tooltip>
+      </v-list-item>
       <!-- <v-list-item
         prepend-icon="mdi-account"
         title="My Account"
@@ -41,16 +41,16 @@ const logout = () => {
       ></v-list-item> -->
       <v-list-item
         prepend-icon="mdi-folder-multiple-image"
-        title="My Images"
         @click="navigate('myImages')"
-        value="myImages"
-      ></v-list-item>
+        value="myImages">
+        <v-tooltip activator="parent" location="right">My Images</v-tooltip>
+      </v-list-item>
       <v-list-item
         prepend-icon="mdi-image-plus-outline"
-        title="Add Image"
         @click="navigate('addImage')"
-        value="addImage"
-      ></v-list-item>
+        value="addImage">
+        <v-tooltip activator="parent" location="right">Add Image</v-tooltip>
+      </v-list-item>
       <!-- <v-list-item
         prepend-icon="mdi-cloud-upload"
         title="Upload Files"
@@ -59,15 +59,17 @@ const logout = () => {
       ></v-list-item> -->
       <v-list-item
         prepend-icon="mdi-image"
-        title="Image Gallery"
         @click="navigate('imageGallery')"
-        value="imageGallery"
-      ></v-list-item>
+        value="imageGallery">
+        <v-tooltip activator="parent" location="right">Image Gallery</v-tooltip>
+      </v-list-item>
     </v-list>
 
     <template v-slot:append>
       <v-list density="compact" nav>
-        <v-list-item prepend-icon="mdi-logout" title="Logout" @click="logout()"></v-list-item>
+        <v-list-item prepend-icon="mdi-logout" @click="logout()">
+          <v-tooltip activator="parent" location="right">Logout</v-tooltip>
+        </v-list-item>
       </v-list>
     </template>
   </v-navigation-drawer>
