@@ -16,9 +16,6 @@ import * as directives from 'vuetify/directives'
 import * as labsComponents from 'vuetify/labs/components'
 
 const vuetify = createVuetify({
-  theme:{
-    defaultTheme: 'light'
-  },
   components: {
     ...components,
     ...labsComponents,

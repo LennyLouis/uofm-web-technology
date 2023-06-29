@@ -21,7 +21,7 @@ const logout = () => {
 <template>
   <v-navigation-drawer rail location="left">
     <v-list>
-      <v-list-item :title="user.firstname" :subtitle="user.email"> </v-list-item>
+      <v-list-item :title="user.firstname" :subtitle="user.email"></v-list-item>
     </v-list>
 
     <v-divider></v-divider>
