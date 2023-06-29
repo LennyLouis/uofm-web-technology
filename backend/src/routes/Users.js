@@ -73,15 +73,15 @@ router.get('/login', async (req, res) => {
 
     if (username) {
       // Find user by username and password
-      user = await User.findOne({ username, password })
+      user = await User.findOne({ username })
     } else if (email) {
       // Find user by email and password
-      user = await User.findOne({ email, password })
+      user = await User.findOne({ email })
     } else {
       return res.status(400).json({ message: 'Please provide a username or email' })
     }
 
-    if (user) {
+    if (user && await bcrypt.compare(password, user.password)) {
       // User found, generate the token
       const token = jwt.sign({ username: user.username, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' })
 
