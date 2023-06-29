@@ -65,7 +65,7 @@ const User = require('../models/User')
  *                 message:
  *                   type: string
  */
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, email, password } = req.body
 
   try {
