@@ -1,6 +1,5 @@
 const express = require('express')
-const jwt = require('jsonwebtoken')
-const bcrypt = require("bcryptjs");
+const userController = require('../controllers/userController')
 
 const router = express.Router()
 
@@ -65,40 +64,7 @@ const User = require('../models/User')
  *                 message:
  *                   type: string
  */
-router.post('/login', async (req, res) => {
-  const { username, email, password } = req.body
-
-  try {
-    let user
-
-    if (username) {
-      // Find user by username and password
-      user = await User.findOne({ username })
-    } else if (email) {
-      // Find user by email and password
-      user = await User.findOne({ email })
-    } else {
-      return res.status(400).json({ message: 'Please provide a username or email' })
-    }
-
-    if (user && await bcrypt.compare(password, user.password)) {
-      // User found, generate the token
-      const token = jwt.sign({ username: user.username, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' })
-
-      return res.status(200).json({
-        success: true,
-        user: user,
-        accessToken: token,
-      })
-    } else {
-      // User not found
-      return res.status(404).json({ message: 'User not found' })
-    }
-  } catch (error) {
-    // Error occurred while querying the database
-    return res.status(500).json({ message: 'Internal server error' })
-  }
-})
+router.post('/login', userController.login)
 
 /**
  * @swagger
@@ -128,36 +94,72 @@ router.post('/login', async (req, res) => {
  *                   type: string
  */
 
-router.post('/register', async (req, res) => {
-  const { firstname, lastname, username, email, password } = req.body
+router.post('/register', userController.register)
 
-  try {
-    // Check if a user with the same username or email already exists
-    const existingUserUsername = await User.findOne({ username })
-    if (existingUserUsername) return res.status(409).json({ message: 'Username already exists' })
-    const existingUserMail = await User.findOne({ email })
-    if (existingUserMail) return res.status(409).json({ message: 'Email already exists' })
+/**
+ * @swagger
+ * /users/update:
+ *   put:
+ *     summary: Update user information
+ *     tags:
+ *       - users
+ *     description: Update user information by ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user:
+ *                 type: string
+ *                 description: ID of the user to be updated
+ *               newInfo:
+ *                 type: object
+ *                 description: Updated information for the user
+ *     responses:
+ *       201:
+ *         description: User information successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 _id:
+ *                   type: string
+ *       400:
+ *         description: An error occurred while updating the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ *       401:
+ *         description: Unauthorized access
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       409:
+ *         description: User does not exist
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 
-    // Hash the password
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
-
-    // Create a new user
-    const newUser = new User({
-      firstname,
-      lastname,
-      username,
-      email,
-      password: hashedPassword
-    })
-
-    // Save the new user to the database
-    await newUser.save()
-
-    res.status(200).json({ message: 'User successfully registered' })
-  } catch (error) {
-    res.status(400).json({ message: 'An error occurred while creating the user', error: error })
-  }
-})
+router.put('/update', userController.updateUser)
 
 module.exports = router

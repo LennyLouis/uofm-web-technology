@@ -42,9 +42,8 @@ export default {
     <v-row>
       <v-col v-for="n in parseInt(limit)" :key="n" class="d-flex child-flex" cols="3" sm="4" md="3" lg="2">
         <v-card>
-          <v-img :src="`https://picsum.photos/500/300?image=${n * 5 + 10}${isGrayScale ? '&grayscale' : ''
-            }`" :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}${isGrayScale ? '&grayscale' : ''
-    }`" aspect-ratio="1" cover class="bg-grey-lighten-2">
+          <v-img :src="`https://picsum.photos/500/300?image=${n * 5 + 10}${isGrayScale ? '&grayscale' : '' }`" 
+            :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}${isGrayScale ? '&grayscale' : '' }`" aspect-ratio="1" cover class="bg-grey-lighten-2">
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular indeterminate color="grey-lighten-5"></v-progress-circular>

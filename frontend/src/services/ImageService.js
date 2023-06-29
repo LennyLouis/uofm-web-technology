@@ -8,7 +8,7 @@ class ImageService {
     try {
       const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/images`, imageData, {
         headers: {
-            Authorization: `Bearer ${AuthService.getAccessToken()}`
+          Authorization: AuthService.getAccessToken()
         }
       })
       return data;
@@ -26,9 +26,11 @@ class ImageService {
       const queryStr = queryString.stringify(imageData);
       const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/images?${queryStr}&select=name,url,description,createdAt`, {
         headers: {
-            Authorization: `Bearer ${AuthService.getAccessToken()}`
+          Authorization: AuthService.getAccessToken()
         }
       })
+      console.log("data")
+      console.log(data)
       return data;
     } catch (err) {
       return {

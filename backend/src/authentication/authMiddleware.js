@@ -4,6 +4,10 @@ const jwt = require('jsonwebtoken');
 const authenticateJWT = (req, res, next) => {
   const token = req.header('Authorization');
 
+  if (req.path === '/login' || req.path === '/register') {
+    return next();
+  }
+
   if (!token) {
     return res.status(401).json({ message: 'Missing token' });
   }
