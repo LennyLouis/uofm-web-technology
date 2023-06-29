@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import AuthService from '@/services/AuthService'
+
 class UserService {
   async register(userData) {
     try {
@@ -16,9 +18,12 @@ class UserService {
 
   async update(userInfo) {
     try {
-      console.log(userInfo)
-      const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/users/update`, userInfo)
-
+      const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/users/update`, userInfo, {
+        headers: {
+          Authorization: AuthService.getAccessToken()
+        }
+      })
+      
       if (data.success) {
         if (localStorage.getItem('user')) {
           localStorage.setItem('user', JSON.stringify(data.user))
