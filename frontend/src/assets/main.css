@@ -1,3 +1,7 @@
-.flex-card {
-  margin-top: 10vh;
+
+@import './base.css';
+
+/* add margin top 10 to grid flex */
+.v-card {
+  margin-top: 50px;
 }

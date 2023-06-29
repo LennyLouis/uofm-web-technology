@@ -21,7 +21,7 @@
  *           type: string
  *           description: The password of the user.
  */
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
   firstname: {
@@ -44,14 +44,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     type: String
   },
-  role: {
-    required: true,
-    type: String
-  },
   status: {
     required: true,
-    type: String
-  }
+    type: String,
+    enum: ["Active", "Inactive", "Suspended"],
+    default: "Active"
+  },
+  roles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Role" }],
+}, {
+  timestamps: true
 })
 
 module.exports = mongoose.model('User', userSchema)
