@@ -98,7 +98,7 @@ router.post('/register', userController.register)
 
 /**
  * @swagger
- * /users/update:
+ * /users/update/{id}:
  *   put:
  *     summary: Update user information
  *     tags:
@@ -160,6 +160,6 @@ router.post('/register', userController.register)
  *                   type: string
  */
 
-router.put('/update', userController.updateUser)
+router.put('/update/:id', userController.updateUser)
 
 module.exports = router

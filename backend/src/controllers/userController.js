@@ -71,8 +71,10 @@ const register = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-  const id = req.params
+  const { id } = req.params
   const { user } = req
+
+  console.log(id, user)
 
   try {
     // Check if user is authorized to update the user
