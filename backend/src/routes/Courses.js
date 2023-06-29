@@ -150,7 +150,7 @@ router.get('/:id', courseController.getCourseById)
  *                   type: string
  */
 
-router.put('/', courseController.updateCourse)
+router.put('/:id', courseController.updateCourse)
 
 /**
  * @swagger

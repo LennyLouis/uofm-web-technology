@@ -111,9 +111,7 @@ const updateImage = async (req, res) => {
     if (!existingImage) return res.status(404).json({ message: 'Image not found' })
 
     // Update the image properties if any of them was sent
-    if (name) existingImage.name = name
-    if (description) existingImage.description = description
-    if (url) existingImage.url = url
+    Object.keys(req.body).forEach(el => existingImage[el] = req.body[el])
 
     // Save the updated image to the database
     await existingImage.save()
