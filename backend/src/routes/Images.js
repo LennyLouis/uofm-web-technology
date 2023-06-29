@@ -85,17 +85,19 @@ router.get('/', async (req, res) => {
  *                   type: string
  */
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
+router.get('/:userId', async (req, res) => {
+  const { userId } = req.params
+
+  console.log(userId)
 
   try {
-    // Check if a image with the same id already exists
-    const existingImage = await Image.findById(id)
-    if (!existingImage) return res.status(404).json({ message: 'This image does not exist' })
+    // Get all images from a user
+    const existingImages = await Image.find({ user: userId })
+    if (!existingImages) return res.status(404).json({ message: 'This user doesn\'t have images.' })
 
-    return res.status(200).json(existingImage)
+    return res.status(200).json(existingImages)
   } catch (error) {
-    return res.status(400).json({ message: 'An error occurred while getting the course', error: error })
+    return res.status(400).json({ message: 'An error occurred while getting the images', error: error })
   }
 })
 
