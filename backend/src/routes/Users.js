@@ -83,7 +83,7 @@ router.post('/login', async (req, res) => {
 
     if (user && await bcrypt.compare(password, user.password)) {
       // User found, generate the token
-      const token = jwt.sign({ username: user.username, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' })
+      const token = jwt.sign({ username: user.username, _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' })
 
       return res.status(200).json({
         success: true,
@@ -154,7 +154,7 @@ router.post('/register', async (req, res) => {
     // Save the new user to the database
     await newUser.save()
 
-    res.status(200).json({ message: 'User successfully registered' })
+    res.status(201).json({ success: true, _id: newUser._id })
   } catch (error) {
     res.status(400).json({ message: 'An error occurred while creating the user', error: error })
   }

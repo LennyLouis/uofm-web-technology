@@ -139,17 +139,20 @@ router.post('/', async (req, res) => {
     const existingImage = await Image.findOne({ name })
     if (existingImage) return res.status(409).json({ message: 'Image already exists' })
 
+    console.log(req.user)
+
     // Create a image
     const newImage = new Image({
       name,
       description,
-      url
+      url,
+      user: req.user._id
     })
 
     // Save the image to the database
     await newImage.save()
 
-    return res.status(200).json({ message: 'Image successfully created' })
+    return res.status(201).json({ success: true, _id: newImage._id })
   } catch (error) {
     return res.status(400).json({ message: 'An error occurred while saving the image', error: error })
   }
@@ -214,7 +217,7 @@ router.put('/:id', async (req, res) => {
     // Save the updated image to the database
     await existingImage.save()
 
-    return res.status(200).json({ message: 'Image successfully updated' })
+    return res.status(200).json({ success: true, _id: existingImage._id })
   } catch (error) {
     return res.status(400).json({ message: 'An error occurred while updating the image', error: error })
   }
@@ -264,7 +267,7 @@ router.delete('/:id', async (req, res) => {
     // Delete the image from the database
     await existingImage.deleteOne()
 
-    return res.status(200).json({ message: 'Image successfully deleted' })
+    return res.status(200).json({ success: true })
   } catch (error) {
     return res.status(400).json({ message: 'An error occurred while deleting the image', error: error })
   }
