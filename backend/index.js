@@ -6,6 +6,10 @@ const bodyParser = require('body-parser')
 const fs = require('fs')
 const swaggerJsdoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
+const { authenticateJWT } = require('./src/authentication/authMiddleware');
+
+// Init .env configuration
+dotenv.config()
 
 /**
  * Express App
@@ -18,8 +22,15 @@ app.use(express.json())
 // For each file of the routes folder, we will add a new route to our Express app.
 // This will allow us to separate our routes into different files without having to
 // manually add each route to our Express app.
-for (file of fs.readdirSync('./src/routes'))
-  app.use(`/api/${file.split('.')[0].toLowerCase()}`, require(`./src/routes/${file}`))
+for (file of fs.readdirSync('./src/routes')) {
+  const routePath = `/api/${file.split('.')[0].toLowerCase()}`;
+
+  if (routePath !== '/api/users') {
+    app.use(routePath, authenticateJWT, require(`./src/routes/${file}`));
+  } else {
+    app.use(routePath, require(`./src/routes/${file}`));
+  }
+}
 
 /**
  * End Express App Declaration
@@ -28,7 +39,7 @@ for (file of fs.readdirSync('./src/routes'))
 /**
  * Database Connection
  */
-const mongoString = 'mongodb://group_02:group_02@umd-esiea-web.cis.umd.umich.edu:8039/group_02'
+const mongoString = process.env.MONGO_CONNECTION_STRING
 
 mongoose.connect(mongoString)
 const database = mongoose.connection
