@@ -3,11 +3,9 @@ const imageController = require('../controllers/imageController')
 
 const router = express.Router()
 
-const Image = require('../models/Image')
-
 /**
  * @swagger
- * /api/images:
+ * /images:
  *   get:
  *     summary: Get paginated images
  *     tags:
@@ -110,7 +108,7 @@ router.post('/', imageController.createImage)
 
 /**
  * @swagger
- * /images/{id}:
+ * /images:
  *   put:
  *     summary: Update an image by ID
  *     tags:
@@ -147,52 +145,45 @@ router.post('/', imageController.createImage)
  *                   type: object
  */
 
-router.put('/:id', async (req, res) => {
-  const { id } = req.params
-  const { name, description, url } = req.body
-
-  try {
-    // Check if any of the image properties were sent
-    if (!name && !description && !url) return res.status(400).json({ message: 'No image properties were provided' })
-
-    // Find the existing image by ID
-    const existingImage = await Image.findById(id)
-    if (!existingImage) return res.status(404).json({ message: 'Image not found' })
-
-    // Update the image properties if any of them was sent
-    if (name) existingImage.name = name
-    if (description) existingImage.description = description
-    if (url) existingImage.url = url
-
-    // Save the updated image to the database
-    await existingImage.save()
-
-    return res.status(200).json({ success: true, _id: existingImage._id })
-  } catch (error) {
-    return res.status(400).json({ message: 'An error occurred while updating the image', error: error })
-  }
-})
+router.put('/', imageController.updateImage)
 
 /**
  * @swagger
- * /images/{id}:
+ * /images:
  *   delete:
  *     summary: Delete an image by ID
  *     tags:
  *       - images
  *     description: Delete an image from the database based on its ID.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the image to delete.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The ID of the image to delete.
  *     responses:
  *       200:
  *         description: Image successfully deleted.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
  *       404:
  *         description: Image not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  *       400:
  *         description: An error occurred while deleting the image.
  *         content:
@@ -206,21 +197,6 @@ router.put('/:id', async (req, res) => {
  *                   type: object
  */
 
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    // Find the existing image by ID
-    const existingImage = await Image.findById(id)
-    if (!existingImage) return res.status(404).json({ message: 'Image not found' })
-
-    // Delete the image from the database
-    await existingImage.deleteOne()
-
-    return res.status(200).json({ success: true })
-  } catch (error) {
-    return res.status(400).json({ message: 'An error occurred while deleting the image', error: error })
-  }
-})
+router.delete('/', imageController.deleteImage)
 
 module.exports = router

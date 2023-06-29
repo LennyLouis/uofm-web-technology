@@ -1,5 +1,6 @@
 const Image = require('../models/Image');
 
+// Get paginated images of the user
 const getPaginatedImages = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -68,6 +69,7 @@ const getPaginatedImages = async (req, res) => {
   }
 };
 
+// Create a image
 const createImage = async (req, res) => {
   const { name, description, url } = req.body
 
@@ -95,7 +97,54 @@ const createImage = async (req, res) => {
   }
 }
 
+// Update a image
+const updateImage = async (req, res) => {
+  const { id } = req.params
+  const { name, description, url } = req.body
+
+  try {
+    // Check if any of the image properties were sent
+    if (!name && !description && !url) return res.status(400).json({ message: 'No image properties were provided' })
+
+    // Find the existing image by ID
+    const existingImage = await Image.findById(id)
+    if (!existingImage) return res.status(404).json({ message: 'Image not found' })
+
+    // Update the image properties if any of them was sent
+    if (name) existingImage.name = name
+    if (description) existingImage.description = description
+    if (url) existingImage.url = url
+
+    // Save the updated image to the database
+    await existingImage.save()
+
+    return res.status(200).json({ success: true, _id: existingImage._id })
+  } catch (error) {
+    return res.status(400).json({ message: 'An error occurred while updating the image', error: error })
+  }
+}
+
+// Delete a image
+const deleteImage = async (req, res) => {
+  const { id } = req.body
+
+  try {
+    // Find the existing image by ID
+    const existingImage = await Image.findById(id)
+    if (!existingImage) return res.status(404).json({ message: 'Image not found' })
+
+    // Delete the image from the database
+    await existingImage.deleteOne()
+
+    return res.status(200).json({ success: true })
+  } catch (error) {
+    return res.status(400).json({ message: 'An error occurred while deleting the image', error: error })
+  }
+}
+
 module.exports = {
   getPaginatedImages,
   createImage,
+  updateImage,
+  deleteImage,
 };
