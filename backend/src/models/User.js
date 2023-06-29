@@ -44,14 +44,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     type: String
   },
-  role: {
-    required: true,
-    type: String
-  },
   status: {
     required: true,
-    type: String
-  }
+    type: String,
+    enum: ["Active", "Inactive", "Suspended"],
+    default: "Active"
+  },
+  roles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Role" }],
+}, {
+  timestamps: true
 })
 
 module.exports = mongoose.model('User', userSchema)
