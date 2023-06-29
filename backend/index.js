@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const dotenv = require('dotenv')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const { authenticateJWT } = require('./src/authentication/authMiddleware');
@@ -28,7 +29,7 @@ for (file of fs.readdirSync('./src/routes')) {
   }
 }
 
-
-app.listen(3000, () => {
-  console.log(`Server Started at ${3000} `)
+port = process.env.PORT || 3000
+app.listen(port, () => {
+  console.log(`Server Started at ${port} `)
 })
