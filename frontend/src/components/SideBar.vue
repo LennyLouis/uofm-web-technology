@@ -27,9 +27,6 @@ const logout = () => {
         <!-- DIV IN SIDE BAR -->
         <div v-bind="props" @click="navigate('account')">
           <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg"></v-img>
-          <v-list>
-            <v-list-item :title="user.firstname[0] + user.lastname[0]" :subtitle="user.email"></v-list-item>
-          </v-list>
         </div>
       </template>
       <!-- DIV SHOWED IN TOOLTIP -->
