@@ -2,8 +2,16 @@
 import imageLogo from '@/assets/images/umich-logo.jpg'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import {useAuthStore} from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth';
 import AuthService from '@/services/AuthService'
+import { useTheme } from "vuetify";
+
+const theme = useTheme();
+const darkMode = ref(false);
+
+const toggleTheme = () => {
+  theme.global.name.value = darkMode.value ? "dark" : "light";
+};
 
 const router = useRouter();
 const imageLogoImg = ref(imageLogo)
@@ -30,13 +38,22 @@ onMounted(() => {
     </v-btn>
     <v-btn variant="text" v-if="!auth.isLoggedIn" color="white" @click="navigate('login')"> Login </v-btn>
     <v-btn variant="text" color="white" @click="navigate('register')"> Register </v-btn>
-    <v-switch 
-      inset 
-      color="white"
-      off-icon="mdi-theme-light-dark"
-      on-icon="mdi-theme-light-dark"></v-switch>
-    <!-- place the switch to the right  -->
     <v-spacer></v-spacer>
-    <v-btn variant="text" color="white" @click="navigate('account')"> My Account </v-btn>
+    <v-row class="theme-switcher">
+      <v-icon color="white">mdi-white-balance-sunny</v-icon>
+      <v-switch
+      inset
+      color="info"
+      v-model="darkMode"
+      @change="toggleTheme()">
+    </v-switch>
+    <v-icon color="white">mdi-moon-waning-crescent</v-icon>
+    </v-row>
   </v-app-bar>
 </template>
+
+<style>
+.theme-switcher{
+  margin-left: 10px;
+}
+</style>

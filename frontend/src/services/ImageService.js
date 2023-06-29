@@ -24,13 +24,27 @@ class ImageService {
 
     try {
       const queryStr = queryString.stringify(imageData);
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/images?${queryStr}&select=name,url,description,createdAt`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/images?${queryStr}&select=id,name,url,description,createdAt`, {
         headers: {
           Authorization: AuthService.getAccessToken()
         }
       })
-      console.log("data")
-      console.log(data)
+      return data;
+    } catch (err) {
+      return {
+        success: false,
+        error: err.message
+      }
+    }
+  }
+
+  async updateImage(imageId, imageData) {
+    try {
+      const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/images/${imageId}`, imageData, {
+        headers: {
+          Authorization: AuthService.getAccessToken()
+        }
+      })
       return data;
     } catch (err) {
       return {
