@@ -94,7 +94,7 @@ router.post('/', async (req, res) => {
     // Save the course to the database
     await newCourse.save()
 
-    return res.status(200).json({ message: 'Course successfully created' })
+    return res.status(201).json({ success: true, _id: newCourse._id })
   } catch (error) {
     return res.status(400).json({ message: 'An error occurred while creating the course', error: error })
   }
@@ -217,7 +217,7 @@ router.put('/:id', async (req, res) => {
     // Save the course to the database
     await existingCourse.save()
 
-    return res.status(200).json({ message: 'Course successfully updated' })
+    return res.status(200).json({ success: true, _id: existingCourse._id })
   } catch (error) {
     return res.status(400).json({ message: 'An error occurred while updating the course', error: error })
   }
@@ -272,7 +272,7 @@ router.delete('/:id', async (req, res) => {
     // Delete the course
     await existingCourse.deleteOne()
 
-    return res.status(200).json({ message: 'Course successfully deleted' })
+    return res.status(200).json({ success: true })
   } catch (error) {
     return res.status(400).json({ message: 'An error occurred while deleting the course', error: error })
   }

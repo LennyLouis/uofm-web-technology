@@ -14,6 +14,9 @@
  *         url:
  *           type: string
  *           description: The URL of the image.
+ *         user:
+ *           type: ObjectId
+ *           description: The user who uploaded the image.
  */
 const mongoose = require('mongoose')
 
@@ -29,6 +32,11 @@ const imageSchema = new mongoose.Schema({
   url: {
     required: true,
     type: String
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
   }
 }, {
   timestamps: true
