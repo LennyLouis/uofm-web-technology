@@ -19,15 +19,7 @@ swagger(app)
 // For each file of the routes folder, we will add a new route to our Express app.
 // This will allow us to separate our routes into different files without having to
 // manually add each route to our Express app.
-for (file of fs.readdirSync('./src/routes')) {
-  const routePath = `/api/${file.split('.')[0].toLowerCase()}`;
-
-  if (routePath !== '/api/users') {
-    app.use(routePath, authenticateJWT, require(`./src/routes/${file}`));
-  } else {
-    app.use(routePath, require(`./src/routes/${file}`));
-  }
-}
+for (file of fs.readdirSync('./src/routes')) app.use(`/api/${file.split('.')[0].toLowerCase()}`, authenticateJWT, require(`./src/routes/${file}`))
 
 port = process.env.PORT || 3000
 app.listen(port, () => {

@@ -83,7 +83,7 @@ router.post('/login', async (req, res) => {
 
     if (user && await bcrypt.compare(password, user.password)) {
       // User found, generate the token
-      const token = jwt.sign({ username: user.username, _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' })
+      const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' })
 
       return res.status(200).json({
         success: true,
@@ -157,6 +157,33 @@ router.post('/register', async (req, res) => {
     res.status(201).json({ success: true, _id: newUser._id })
   } catch (error) {
     res.status(400).json({ message: 'An error occurred while creating the user', error: error })
+  }
+})
+
+router.put('/update', async (req, res) => {
+  const userId = req.body.user
+  const newInfo = req.body.newInfo
+  const { user } = req
+
+  try {
+    // Check if user is authorized to update the user
+    if (user._id == userId || user.role == 'admin') {
+      // Check if a user with the same user id already exists
+      const existingUser = await User.findOne({ _id: userId })
+      if (!existingUser) return res.status(409).json({ message: 'User does not exist' })
+
+      // Update the user
+      Object.keys(newInfo).forEach(el => existingUser[el] = newInfo[el])
+
+      // Save the updated user to the database
+      await existingUser.save()
+
+      res.status(201).json({ success: true, _id: existingUser._id })
+    } else {
+      res.status(401).json({ message: 'Unauthorized' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'An error occurred while updating the user', error: error })
   }
 })
 

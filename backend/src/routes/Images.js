@@ -1,4 +1,5 @@
 const express = require('express')
+const imageController = require('../controllers/imageController')
 
 const router = express.Router()
 
@@ -6,98 +7,72 @@ const Image = require('../models/Image')
 
 /**
  * @swagger
- * /images:
+ * /api/images:
  *   get:
- *     summary: Get all images
+ *     summary: Get paginated images
  *     tags:
  *       - images
- *     description: Retrieve all images.
+ *     description: Retrieve paginated images based on query parameters.
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - name: limit
+ *         in: query
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - name: sort
+ *         in: query
+ *         schema:
+ *           type: string
+ *           default: createdAt
+ *       - name: order
+ *         in: query
+ *         schema:
+ *           type: string
+ *           default: asc
+ *       - name: select
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: search
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: user
+ *         in: query
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: Images successfully retrieved.
- *       404:
- *         description: No images found.
+ *         description: Paginated images successfully retrieved.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               $ref: '#/components/schemas/PaginatedImagesResponse'
+ *       400:
+ *         description: Bad request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Page does not exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-
-router.get('/', async (req, res) => {
-  try {
-    const images = await Image.find()
-
-    if (!images) return res.status(404).json({ message: 'No images found' })
-
-    return res.status(200).json(images)
-  } catch (error) {
-    return res.status(500).json({ message: 'Internal server error' })
-  }
-})
-
-/**
- * @swagger
- * /images/{id}:
- *   get:
- *     summary: Get an image by ID
- *     tags:
- *       - images
- *     description: Retrieve an image by its ID.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: The ID of the image.
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Image successfully retrieved.
- *       404:
- *         description: Image not found.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *       400:
- *         description: An error occurred while getting the image.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- */
-
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    // Check if a image with the same id already exists
-    const existingImage = await Image.findById(id)
-    if (!existingImage) return res.status(404).json({ message: 'This image does not exist' })
-
-    return res.status(200).json(existingImage)
-  } catch (error) {
-    return res.status(400).json({ message: 'An error occurred while getting the course', error: error })
-  }
-})
+router.get('/', imageController.getPaginatedImages)
 
 /**
  * @swagger
@@ -131,32 +106,7 @@ router.get('/:id', async (req, res) => {
  *                   type: object
  */
 
-router.post('/', async (req, res) => {
-  const { name, description, url } = req.body
-
-  try {
-    // Check if a image with the same name already exists
-    const existingImage = await Image.findOne({ name })
-    if (existingImage) return res.status(409).json({ message: 'Image already exists' })
-
-    console.log(req.user)
-
-    // Create a image
-    const newImage = new Image({
-      name,
-      description,
-      url,
-      user: req.user._id
-    })
-
-    // Save the image to the database
-    await newImage.save()
-
-    return res.status(201).json({ success: true, _id: newImage._id })
-  } catch (error) {
-    return res.status(400).json({ message: 'An error occurred while saving the image', error: error })
-  }
-})
+router.post('/', imageController.createImage)
 
 /**
  * @swagger
