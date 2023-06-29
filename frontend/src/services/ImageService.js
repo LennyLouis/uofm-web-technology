@@ -29,6 +29,8 @@ class ImageService {
           Authorization: AuthService.getAccessToken()
         }
       })
+      console.log("data")
+      console.log(data)
       return data;
     } catch (err) {
       return {
