@@ -2,7 +2,7 @@
 import imageLogo from '@/assets/images/umich-logo.jpg'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import {useAuthStore} from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth';
 import AuthService from '@/services/AuthService'
 
 const router = useRouter();
@@ -30,10 +30,6 @@ onMounted(() => {
     </v-btn>
     <v-btn variant="text" v-if="!auth.isLoggedIn" color="white" @click="navigate('login')"> Login </v-btn>
     <v-btn variant="text" color="white" @click="navigate('register')"> Register </v-btn>
-    <v-switch 
-      inset 
-      color="white"
-      off-icon="mdi-theme-light-dark"
-      on-icon="mdi-theme-light-dark"></v-switch>
+    <v-switch inset color="white" off-icon="mdi-theme-light-dark" on-icon="mdi-theme-light-dark"></v-switch>
   </v-app-bar>
 </template>
