@@ -85,7 +85,11 @@ router.get('/login', async (req, res) => {
       // User found, generate the token
       const token = jwt.sign({ username: user.username, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' })
 
-      return res.status(200).json({ token })
+      return res.status(200).json({ 
+        success: true,
+        user: user,
+        accessToken: token, 
+      })
     } else {
       // User not found
       return res.status(404).json({ message: 'User not found' })
