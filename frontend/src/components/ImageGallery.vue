@@ -28,6 +28,13 @@ export default {
                             </v-row>
                         </template>
                     </v-img>
+                    <v-card-title>
+                        Image URL :
+                    </v-card-title>
+
+                    <v-card-subtitle>
+                        https://picsum.photos/500/300?image={{ n * 5 + 10 }}
+                    </v-card-subtitle>
                 </v-card>
             </v-col>
         </v-row>

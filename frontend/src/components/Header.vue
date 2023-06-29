@@ -9,6 +9,7 @@ import { ref } from 'vue';
 
 <template>
     <v-app-bar color="#00274c">
+
         <v-img :width="30" height="70" max-width="100" :src="imageLogo"></v-img>
         <v-btn varient="text" color="white">Esiea Web Technology</v-btn>
         <v-btn varient="text" color="white">Login</v-btn>
