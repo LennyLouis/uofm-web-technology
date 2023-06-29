@@ -53,7 +53,7 @@ const getCourseById = async (req, res) => {
 }
 
 const updateCourse = async (req, res) => {
-  const { id, newInfo } = req.body
+  const { id } = req.params
 
   try {
     // Check if any of the image properties were sent
@@ -64,7 +64,7 @@ const updateCourse = async (req, res) => {
     if (!existingCourse) return res.status(404).json({ message: 'This course does not exist' })
 
     // Update the course
-    Object.keys(newInfo).forEach(el => existingCourse[el] = newInfo[el])
+    Object.keys(req.body).forEach(el => existingCourse[el] = req.body[el])
 
     // Save the course to the database
     await existingCourse.save()

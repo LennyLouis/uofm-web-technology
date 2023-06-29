@@ -16,9 +16,9 @@ class UserService {
     }
   }
 
-  async update(userInfo) {
+  async update(userId, userInfo) {
     try {
-      const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/users/update`, userInfo, {
+      const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/users/update/${userId}`, userInfo, {
         headers: {
           Authorization: AuthService.getAccessToken()
         }

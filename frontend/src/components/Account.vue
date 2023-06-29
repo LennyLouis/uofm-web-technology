@@ -99,15 +99,14 @@ export default {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.loading = true
-                const { success, error } = await UserService.update({
-                    id: user.value._id,
-                    newInfo: {
+                const { success, error } = await UserService.update(
+                    user.value._id,
+                    {
                         username: this.userName,
                         firstname: this.firstName,
                         lastname: this.lastName,
                         email: this.email
-                    }
-                })
+                    })
                 if (!success) {
                     alert(error)
                     this.loading = false
