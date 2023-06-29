@@ -23,7 +23,8 @@ class UserService {
           Authorization: AuthService.getAccessToken()
         }
       })
-      
+      console.log("test", data)
+
       if (data.success) {
         if (localStorage.getItem('user')) {
           localStorage.setItem('user', JSON.stringify(data.user))

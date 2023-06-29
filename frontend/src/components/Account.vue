@@ -26,7 +26,7 @@ export default {
             if (valid) {
                 this.loading = true
                 const { success, error } = await UserService.update({
-                    user: user.value._id,
+                    id: user.value._id,
                     newInfo: {
                         username: this.userName,
                         firstname: this.firstName,
